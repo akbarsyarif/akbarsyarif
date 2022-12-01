@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WazWez</title>
+
+    <link rel="stylesheet" href="tugassesi8style.css" />
+  </head>
+  <body>
+    <!-- HEADER -->
+    <header>
+      <h1>waz<span class="wez">wez</span>.</h1>
+      <div class="navbar-icon">
+        <div class="notifikasi">
+          <img src="img/Notification.svg" alt="notification" />
+        </div>
+        <div class="border-foto">
+          <img class="profile-picture" src="img/valk.jpg" alt="valk" />
+        </div>
+        <div class="profile-name"><p>Akbar Syarif</p></div>
+        <div class="profile-dropdown">
+          <img src="img/arrow-down-black.svg" alt="arrow-down-black" />
+        </div>
+      </div>
+    </header>
+    <!-- AKHIR HEADER -->
+
+    <!-- KONTEN -->
+    <div class="container">
+      <!-- KONTEN TOP -->
+      <div class="my-task">
+        <h2>MY TASKS</h2>
+        <div class="to-do-list">
+          <h3>To Do List</h3>
+          <button class="tambah-tugas" onclick="formInput();">
+            <img src="img/Plus.svg" alt="plus-white" />
+            <p>Tambah tugas</p>
+          </button>
+        </div>
+        <p>Buat list tugas harian buat saya</p>
+        <form id="form-tambah-tugas" onsubmit="submitTugas();"></form>
+        <div class="sort-by">
+          <p>Sort By</p>
+          <div class="by-tanggal">
+            <p>By Tanggal</p>
+            <img src="img/Arrow - Down 2.svg" alt="arrow-down-orange" />
+          </div>
+        </div>
+      </div>
+      <!-- AKHIR KONTEN TOP -->
+
+      <!-- KONTEN MID -->
+      <section id="main-task"></section>
+
+      <!-- AKHIR KONTEN MID -->
+
+      <!-- KONTEN BOTTOM -->
+      <div class="finished-task">
+        <img src="img/Arrow - Right 2.svg" alt="arrow-right" />
+        <h4>Terselesaikan (3 tugas)</h4>
+      </div>
+      <!-- AKHIR KONTEN BOTTOM -->
+    </div>
+    <!-- AKHIR KONTEN -->
+  </body>
+</html>
+
+<script>
+  const formTambahTugas = document.getElementById("form-tambah-tugas");
+  const formInput = () => {
+    formTambahTugas.innerHTML = `<input type = "text" id = "tugas-baru" placeholder = "Masukan Tugas Anda">
+      <br>
+    <input type = "text" id = "tanggal" placeholder = "Kapan Tugas Akan Dikerjakan">
+      <br>
+    <input type = "text" id = "notes" placeholder = "Berikan Catatan (Bila Ada)">
+      <br>
+    <button type = "submit">Submit</button>`;
+  };
+  let tugasBaruTersubmit = [];
+  let tanggalTersubmit = [];
+  let notesTersubmit = [];
+  let tugasTersubmit = [];
+
+  const submitTugas = () => {
+    event.preventDefault();
+    const tugasBaru = document.getElementById("tugas-baru").value;
+    const tanggal = document.getElementById("tanggal").value;
+    const notes = document.getElementById("notes").value;
+    if (tugasBaru === "" || tanggal === "") {
+      alert("Tugas dan Tanggal Harus Diisi");
+      document.getElementById("tugas-baru").style.borderColor = "red";
+      document.getElementById("tanggal").style.borderColor = "red";
+    } else {
+      formTambahTugas.innerHTML = "";
+      const tugasValid = `${tugasBaru} ${tanggal} ${notes}`;
+      tugasTersubmit.push(tugasValid);
+      const tugasBaruValid = tugasBaru;
+      tugasBaruTersubmit.push(tugasBaruValid);
+      const tanggalValid = tanggal;
+      tanggalTersubmit.push(tanggalValid);
+      const notesValid = notes;
+      notesTersubmit.push(notesValid);
+      tampilkanTugas();
+    }
+  };
+  const tampilkanTugas = () => {
+    document.getElementById("main-task").innerHTML = "";
+    for (let i = 0; i < tugasTersubmit.length; i++) {
+      const mainTask = document.createElement("div");
+
+      mainTask.innerHTML = `<div class="description-box">
+            <div class="description">
+              <img src="img/radiouncheck.svg" alt="radio-uncheck" />
+              <h3>${tugasBaruTersubmit[i]}</h3>
+              <p>${tanggalTersubmit[i]}</p>
+            </div>
+            <button class = "delete-button" onclick = "deleteTugas(${i})">Hapus Tugas</button>
+            </div>
+          <p class="notes">${notesTersubmit[i]}</p>`;
+      document.getElementById("main-task").appendChild(mainTask);
+    }
+  };
+
+  const deleteTugas = (index) => {
+    const tanyaUser = confirm("Apakah anda yakin ingin menghapus tugas ini?");
+
+    if (tanyaUser === false) {
+      alert("OK! Tugas tidak jadi dihapus");
+    } else {
+      tugasTersubmit.splice(index, 1);
+      tugasBaruTersubmit.splice(index, 1);
+      tanggalTersubmit.splice(index, 1);
+      notesTersubmit.splice(index, 1);
+    }
+    tampilkanTugas();
+  };
+</script>
